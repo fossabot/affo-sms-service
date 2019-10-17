@@ -3,28 +3,26 @@ import pytest
 from affo_sms_service.application import create_app
 from affo_sms_service.extensions import db as db_
 
-TEST_DATABASE_URI = f'sqlite://'
+TEST_DATABASE_URI = f"sqlite://"
 
 
 def pytest_addoption(parser):
-    parser.addoption(
-        '--phone',
-        action='store',
-        help='A phone which receives test messages'
-    )
+    parser.addoption("--phone", action="store", help="A phone which receives test messages")
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def phone(request):
-    return request.config.getoption('--phone')
+    value = request.config.getoption("--phone")
+
+    if not value:
+        raise pytest.skip("A phone to receive test messages is not set")
+
+    return value
 
 
-@pytest.fixture(scope='session', autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 def app(request):
-    settings_override = {
-        'TESTING': True,
-        'SQLALCHEMY_DATABASE_URI': TEST_DATABASE_URI
-    }
+    settings_override = {"TESTING": True, "SQLALCHEMY_DATABASE_URI": TEST_DATABASE_URI}
     app = create_app(settings_override)
 
     # Establish an application context before running the tests.
@@ -38,7 +36,7 @@ def app(request):
     return app
 
 
-@pytest.fixture(scope='session', autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 def db(app, request):
     db_.app = app
     db_.create_all()
@@ -46,7 +44,7 @@ def db(app, request):
     return db_
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def session(db, request):
     connection = db.engine.connect()
     transaction = connection.begin()
@@ -65,6 +63,6 @@ def session(db, request):
     return session
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def client(app, db):
     return app.test_client()
