@@ -21,7 +21,7 @@ install:
 
 script:
 - flake8 .
-- python setup.py test
+- pytest -m "not release"
 
 after_success:
 - coveralls

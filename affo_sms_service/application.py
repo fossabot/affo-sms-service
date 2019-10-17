@@ -8,7 +8,6 @@ import connexion_buzz
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-from .api import exception
 from .extensions import db, migrate
 from . import settings
 
