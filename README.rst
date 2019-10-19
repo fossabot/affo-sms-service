@@ -4,7 +4,7 @@ AFFO SMS Service
 ================
 
 ============ =============================================
-**Version**  1.0.1
+**Version**  1.0.2.dev
 **Web**      https://affo.io/
 **Download** https://pypi.org/affoio/affo-sms-service/
 **Source**   https://github.com/affoio/affo-sms-service/
